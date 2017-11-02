@@ -26,7 +26,7 @@ import org.springframework.samples.petclinic.model.Visit;
 
 
 /**
- * Mostly used as a facade for all Petclinic controllers
+ * Mostly used as a facade so all controllers have a single point of entry
  *
  * @author Michael Isvy
  */
@@ -47,5 +47,7 @@ public interface ClinicService {
     void saveOwner(Owner owner) throws DataAccessException;
 
     Collection<Owner> findOwnerByLastName(String lastName) throws DataAccessException;
+
+	Collection<Visit> findVisitsByPetId(int petId);
 
 }
