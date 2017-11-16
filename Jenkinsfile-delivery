@@ -1,6 +1,6 @@
 node('Linux') {
     
-   
+   cleanWs()  
    stage('Environment') {
       
      if (isUnix()) {
