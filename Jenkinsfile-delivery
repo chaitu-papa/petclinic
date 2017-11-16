@@ -14,5 +14,20 @@ node('Linux') {
       }
    
    }
+   stage('Load Test') {
+      
+     if ( "$env_name" == "UAT" ) {
+         
+          checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'c7e60db1-4689-46b7-92dc-1cd7ffcc3f16', url: 'git@github.com:chaitu-papa/petclinic.git']]])
+          sh "/home/ec2-user/apache-jmeter-3.3/bin/jmeter.sh -n -t src/test/jmeter/petclinic_test_plan.jmx -l report.jtl -e -o test-out -Jjmeter.save.saveservice.output_format=csv"
+	  perfReport modePerformancePerTestCase: true, modeThroughput: true, sourceDataFiles: 'report.jtl'
+	   } 
+	   else {
+        
+         bat(/"gradlew.bat" deploy/)
+      }
+   
+   }
+
 }
 
