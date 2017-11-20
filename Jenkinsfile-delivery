@@ -15,10 +15,12 @@ node('Linux') {
    }
    stage('Load Test') {
       
-     if ( "$env_name" == "UAT" ) {
+     if (isUnix()) {
+     	if ( "$env_name" == "UAT" ) {
          
 	  build job: 'jmeter-pipeline', parameters: [string(name: 'env_name', value: 'UAT')]
 	   } 
+          }
 	   else {
         
          bat(/"gradlew.bat" deploy/)
