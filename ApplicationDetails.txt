@@ -32,4 +32,8 @@ docker run -d -p 49009:8080 --name tomcat tomcat:cutomerApp
 Step 7:Sample change
 
 Adding new change
+
  Commiting a change 
+
+
+
