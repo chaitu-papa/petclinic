@@ -35,6 +35,7 @@ Adding new change
 
  Commiting a change 
   Commiting a second change
+  Commiting a Third change
 
 
 
