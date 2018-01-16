@@ -1,0 +1,11 @@
+node {
+    
+    stage('compile-unit-test') {
+      
+	 sh 'chmod +x gradlew'
+         sh "./gradlew clean build"
+	 archiveArtifacts 'build/libs/*.war'
+         hygieiaDeployPublishStep applicationName: 'PetClinic', artifactDirectory: 'build/libs', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '0.0.1', buildStatus: 'Success', environmentName: 'DEV'
+   }
+}
+
