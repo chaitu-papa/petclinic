@@ -39,7 +39,7 @@ node {
         sh 'chmod +x gradlew'
         sh "./gradlew upload --info"
 		 hygieiaBuildPublishStep buildStatus: 'InProgress'
-         hygieiaArtifactPublishStep artifactDirectory: '/build/libs/', artifactGroup: "$group_id", artifactName: '*.war', artifactVersion: '1.0.$BUILD_NUMBER'
+        // hygieiaArtifactPublishStep artifactDirectory: '/build/libs/', artifactGroup: "$group_id", artifactName: '*.war', artifactVersion: '1.0.$BUILD_NUMBER'
       } else {
          bat(/"gradlew.bat" upload/)
       }
