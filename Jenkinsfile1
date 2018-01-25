@@ -1,7 +1,7 @@
 node {
         cleanWs() 
 	stage('compile') { 
-        	checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'c7e60db1-4689-46b7-92dc-1cd7ffcc3f16', url: 'git@github.com:chaitu-papa/petclinic.git']]])
+                git credentialsId: 'd6643ea6-9bb1-457c-ab65-75c59c7504ee', url: 'https://github.com/chaitu-papa/petclinic.git'
         	sh 'chmod +x gradlew'
         	sh "./gradlew clean build"
         	hygieiaBuildPublishStep buildStatus: 'InProgress'
