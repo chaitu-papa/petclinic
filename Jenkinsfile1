@@ -33,7 +33,7 @@ node {
         	sh 'chmod +x gradlew'
         	sh "./gradlew upload --info"
         	hygieiaBuildPublishStep buildStatus: 'InProgress'
-        	hygieiaArtifactPublishStep artifactDirectory: '/build/libs/', artifactGroup: 'org.sample', artifactName: '*.war', artifactVersion: '1.0.1'
+        	hygieiaArtifactPublishStep artifactDirectory: 'build/libs/', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.1'
       } 
    }
 }
