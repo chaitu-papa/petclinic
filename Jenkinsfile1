@@ -1,42 +1,12 @@
 node {
         cleanWs() 
-	stage('pull-source') { 
+	stage('compile') { 
         	checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'c7e60db1-4689-46b7-92dc-1cd7ffcc3f16', url: 'git@github.com:chaitu-papa/petclinic.git']]])
-   }
-	stage('compile-unit-test') {
-      // Run the gradle build
-      	if (isUnix()) {
         	sh 'chmod +x gradlew'
         	sh "./gradlew clean build"
         	hygieiaBuildPublishStep buildStatus: 'InProgress'
-      }
-   }
-   	stage('code-coverage') {
-      // Run the gradle build
-      	if (isUnix()) {
-       		sh 'chmod +x gradlew'
-         	sh "./gradlew jacocoTestReport"
-      } 
-   }
-	stage('code-analysis') {
-      // Run the gradle sonar
-      	if (isUnix()) {
-          withCredentials([string(credentialsId: 'sonar-token', variable: 'Sonar_token')]) {
-        	sh "./gradlew sonarqube -Dsonar.host.url=$env.SONAR_URL -Dsonar.login=$Sonar_token" }
-        	hygieiaBuildPublishStep buildStatus: 'InProgress'
-       } 
-   }
-   	stage('artifact-publish') {
-      // Run the gradle upload
-      	if (isUnix()) {
-       		env.SNAPSHOT="SNAPSHOT"
-        	env.BUILD_NUM="$env.BUILD_NUMBER"
-        	sh 'chmod +x gradlew'
-        	sh "./gradlew upload --info"
-        	hygieiaBuildPublishStep buildStatus: 'Success'
         	hygieiaArtifactPublishStep artifactDirectory: '/home/ec2-user/workspace/Immutable-infra-demo/petclinic/Infrastructure-aws-cloud/pipeline/hygieiadeliverypipeline/build/libs', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.1'
 	        hygieiaDeployPublishStep applicationName: 'app_name', artifactDirectory: '/home/ec2-user/workspace/Immutable-infra-demo/petclinic/Infrastructure-aws-cloud/pipeline/hygieiadeliverypipeline/build/libs', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.1', buildStatus: 'InProgress', environmentName: "BAKE"
-      } 
+      }
    }
-}
 
