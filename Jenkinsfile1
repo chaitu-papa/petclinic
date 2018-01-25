@@ -34,8 +34,8 @@ node {
         	sh 'chmod +x gradlew'
         	sh "./gradlew upload --info"
         	hygieiaBuildPublishStep buildStatus: 'Success'
-        	hygieiaArtifactPublishStep artifactDirectory: 'build/libs/', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.1'
-	        hygieiaDeployPublishStep applicationName: 'app_name', artifactDirectory: 'build/libs/', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.1', buildStatus: 'InProgress', environmentName: "BAKE"
+        	hygieiaArtifactPublishStep artifactDirectory: '/home/ec2-user/workspace/Immutable-infra-demo/petclinic/Infrastructure-aws-cloud/pipeline/hygieiadeliverypipeline/build/libs', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.1'
+	        hygieiaDeployPublishStep applicationName: 'app_name', artifactDirectory: '/home/ec2-user/workspace/Immutable-infra-demo/petclinic/Infrastructure-aws-cloud/pipeline/hygieiadeliverypipeline/build/libs', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.1', buildStatus: 'InProgress', environmentName: "BAKE"
       } 
    }
 }
