@@ -50,30 +50,22 @@ node {
 }
 node('Linux') {
     
-     stage('bake-image') {
-                 
+     stage('bake-image') {                 
       if (isUnix()) {
          withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) { 
          ansiblePlaybook credentialsId: '14bd8691-b88a-427a-8488-cf28846b9820', installation: 'ansible', extras: '--extra-vars="env_name=$env_name"  --extra-vars="app_name=$app_name"  --extra-vars="sg_group_id=$sg_group"  --extra-vars="vpc_subnet_id=$subnet"  --extra-vars="instance_type=t2.micro" --extra-vars="ami_id=$ami_id"', playbook: 'provision-aws.yml', sudoUser: null
          ansiblePlaybook credentialsId: '14bd8691-b88a-427a-8488-cf28846b9820', installation: 'ansible',extras: '--extra-vars="app_version=1.0-SNAPSHOT" --extra-vars="env_name=$env_name" --extra-vars="group_id=$group_id"  --extra-vars="app_name=$app_name"', playbook: 'app-deploy.yml', sudoUser: null
          ansiblePlaybook credentialsId: '14bd8691-b88a-427a-8488-cf28846b9820', installation: 'ansible',  extras: '--extra-vars="env_name=$env_name" --extra-vars="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --extra-vars="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --extra-vars="app_name=$app_name" --extra-vars="env_name=$env_name" --extra-vars="app_version=1.0.$BUILD_NUMBER" ', playbook: 'amicreate.yml', sudoUser: null
 		 hygieiaDeployPublishStep applicationName: "$app_name", artifactDirectory: 'build/libs/', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.$BUILD_NUMBER', buildStatus: 'InProgress', environmentName: 'BAKE'        
-		  } else {
-        
-         bat(/"gradlew.bat" deploy/)
-      }
-   
-   }
-   stage('DEV-Environment') {
-      
+		  } 
+		}
+    }
+   stage('DEV-Environment') {      
        if (isUnix()) {
           withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) { 
           ansiblePlaybook credentialsId: '14bd8691-b88a-427a-8488-cf28846b9820', installation: 'ansible', extras: '--extra-vars="dns_name=$env_name" --extra-vars="alias_hosted_zone_id=$alias_hosted_zone_id" --extra-vars="min_instances=$min_instances" --extra-vars="max_instances=$max_instances" --extra-vars="cf_sg_group=$cf_sg_group" --extra-vars="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --extra-vars="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --extra-vars="app_name=$app_name" --extra-vars="env_name=$env_name" --extra-vars="cf_subnet=$cf_subnet"  --extra-vars="hosted_zone=$hosted_zone" --extra-vars="app_version=1.0.$BUILD_NUMBER" --extra-vars="InstanceType=$infra_type" --extra-vars="group_id=$group_id"', playbook: 'cf-aws.yml', sudoUser: null
           hygieiaDeployPublishStep applicationName: "$app_name", artifactDirectory: 'build/libs/', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.$BUILD_NUMBER', buildStatus: 'InProgress', environmentName: 'DEV'     
-		  } else {
-        
-         bat(/"gradlew.bat" deploy/)
-      }
+		  }
    
    }
 }
