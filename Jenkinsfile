@@ -8,6 +8,7 @@ node {
         
          sh 'chmod +x gradlew'
          sh "./gradlew clean build"
+         hygieiaBuildPublishStep buildStatus: 'InProgress'
       } else {
          bat(/"gradlew.bat" clean build/)
       }
@@ -17,6 +18,7 @@ node {
       if (isUnix()) {
          sh 'chmod +x gradlew'
          sh "./gradlew jacocoTestReport"
+         hygieiaBuildPublishStep buildStatus: 'InProgress'
       } else {
          bat(/"gradlew.bat" jacocoTestReport/)
       }
@@ -37,6 +39,8 @@ node {
         env.BUILD_NUM="$env.BUILD_NUMBER"
         sh 'chmod +x gradlew'
         sh "./gradlew upload --info"
+        hygieiaBuildPublishStep buildStatus: 'InProgress'
+        hygieiaArtifactPublishStep artifactDirectory: 'build/libs/', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: "1.0.$BUILD_NUMBER"
       } else {
          bat(/"gradlew.bat" upload/)
       }
