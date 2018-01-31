@@ -5,7 +5,7 @@ node {
       // Run the gradle build
       	if (isUnix()) {
 		    sh 'chmod +x petclinic.git/gradlew'
-        	sh 'cd petclinic.git;./gradlew clean build'
+        	sh 'cd petclinic.git;./gradlew clean build;cd ..'
         	hygieiaBuildPublishStep buildStatus: 'InProgress'
       }
    }
