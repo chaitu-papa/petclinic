@@ -35,8 +35,7 @@ node {
         	sh "cd petclinic.git;./gradlew upload --info"
         	hygieiaBuildPublishStep buildStatus: 'InProgress'
         	hygieiaArtifactPublishStep artifactDirectory: 'petclinic.git/build/libs/', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.1'
-	        hygieiaDeployPublishStep applicationName: 'app_name', artifactDirectory: 'petclinic.git/build/libs/', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.1', buildStatus: 'InProgress', environmentName: "BAKE"
-      } 
+	      } 
    }
 }
 
