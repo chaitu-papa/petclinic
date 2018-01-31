@@ -5,15 +5,15 @@ node {
       // Run the gradle build
       	if (isUnix()) {
 		    sh 'chmod +x petclinic.git/gradlew'
-        	sh 'cd petclinic.git;./gradlew clean build;cd ..'
+        	sh 'cd petclinic.git;./gradlew clean build'
         	hygieiaBuildPublishStep buildStatus: 'InProgress'
       }
    }
    	stage('code-coverage') {
       // Run the gradle build
       	if (isUnix()) {
-       		sh 'chmod +x petclinic.git/gradlew'
-         	sh "cd petclinic.git;./gradlew jacocoTestReport"
+       		
+         	sh "./gradlew jacocoTestReport"
       } 
    }
 	stage('code-analysis') {
