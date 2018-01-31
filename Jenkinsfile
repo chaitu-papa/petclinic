@@ -37,7 +37,6 @@ node('Linux') {
         	hygieiaArtifactPublishStep artifactDirectory: 'petclinic.git/build/libs/', artifactGroup: 'org.springframework.samples', artifactName: '*.war', artifactVersion: '1.0.$BUILD_NUMBER'
 	      } 
    }
-}
 
      stage('bake-image') {                 
       if (isUnix()) {
