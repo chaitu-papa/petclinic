@@ -1,6 +1,7 @@
 
 node('Linux') {
     stage('pull-source') { 
+	    cleanWs()
         checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'c7e60db1-4689-46b7-92dc-1cd7ffcc3f16', url: 'git@github.com:chaitu-papa/petclinic.git']]])
    }
    stage('compile-unit-test') {
