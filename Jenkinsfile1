@@ -1,5 +1,4 @@
 node {
-        
 
 	stage('compile-unit-test') {
       // Run the gradle build
@@ -11,9 +10,9 @@ node {
    }
    	stage('code-coverage') {
       // Run the gradle build
-      	if (isUnix()) {
-       		
-         	sh "./gradlew jacocoTestReport"
+      	if (isUnix()) {   
+            sh 'chmod +x petclinic.git/gradlew'   		
+         	sh "cd petclinic.git;./gradlew jacocoTestReport"
       } 
    }
 	stage('code-analysis') {
