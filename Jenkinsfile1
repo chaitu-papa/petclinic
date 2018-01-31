@@ -12,7 +12,7 @@ node {
    	stage('code-coverage') {
       // Run the gradle build
       	if (isUnix()) {
-       		sh 'chmod +x petclinic.git/gradlew
+       		sh 'chmod +x petclinic.git/gradlew'
          	sh "cd petclinic.git;./gradlew jacocoTestReport"
       } 
    }
