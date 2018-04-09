@@ -18,8 +18,7 @@ apply plugin: 'war'
 apply plugin: 'jacoco'
 
 group = 'org.springframework.samples'
-artifactId 'sn-spring-petclinic'
-
+archivesBaseName = "sn-spring-petclinic"
 description = """petclinic"""
 
 sourceCompatibility = 1.7
