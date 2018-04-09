@@ -6,8 +6,8 @@ plugins {
 version = '2.0-SNAPSHOT'
  sonarqube {
  properties {
-         property "sonar.projectName", "petclinic"
-         property "sonar.projectKey", "Java:petclinic"
+         property "sonar.projectName", "sn-spring-petclinic"
+         property "sonar.projectKey", "Java:sn-spring-petclinic"
          property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
          property "sonar.projectVersion", "${version}"
      }
