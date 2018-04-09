@@ -18,6 +18,7 @@ apply plugin: 'war'
 apply plugin: 'jacoco'
 
 group = 'org.springframework.samples'
+artifactId 'sn-spring-petclinic'
 
 description = """petclinic"""
 
