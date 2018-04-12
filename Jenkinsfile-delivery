@@ -10,7 +10,7 @@ import java.net.URL
 properties([[$class: 'BuildDiscarderProperty',
              strategy: [$class: 'LogRotator', numToKeepStr: '5']]])
  node('Linux') {
-    
+		cleanWs() 
        try {		
 				
 	   stage('Environment') {
