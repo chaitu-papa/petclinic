@@ -14,8 +14,8 @@ properties([[$class: 'BuildDiscarderProperty',
        try {		
 				
 	   stage('Environment') {
-		if (isUnix()) {
-			sh 'wget -o build/libs/$app_name http://34.196.120.121:8081/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.springframework.samples\&a=$app_name\&v=1.0-SNAPSHOT\&p=war'
+		if (isUnix()) {			
+			sh 'wget -o build/libs/spring-petclinic.war http://34.196.120.121:8081/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.springframework.samples\&a=spring-petclinic\&v=1.0-SNAPSHOT\&p=war'
 		 	withCredentials([string(credentialsId: 'servicenow', variable: 'servicenow')]) {
 				def serviceid = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/devops_request_details" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"sysId\\": \\"$ServiceNowID\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
 				println "ServiceNow Requested Item: " +serviceid.trim()
