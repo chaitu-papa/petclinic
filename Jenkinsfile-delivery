@@ -83,7 +83,7 @@ properties([[$class: 'BuildDiscarderProperty',
 				} // Servicenow credentials	
 		} // UAT environment          
 		  	withCredentials([string(credentialsId: 'servicenow', variable: 'servicenow')]) {
-			def ret6 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" AWS Environment Build,Deployment and Completed successfully on $env_name environment \\",\\"state\\": \\"Complete\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true) 
+			def ret6 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" AWS Environment Build completed successfully on $env_name environment \\",\\"state\\": \\"Complete\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true) 
 					if ( ret6.trim() == "success" ) {
 							println ret6
 					} else {
