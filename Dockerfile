@@ -6,6 +6,8 @@ RUN echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" >> /etc
 RUN apt-get update && apt-get install -y filebeat metricbeat packetbeat
 COPY metricbeat.yml /etc/metricbeat/
 COPY filebeat.yml /etc/filebeat/
+RUN chmod 744  /etc/metricbeat/metricbeat.yml
+RUN chmod 744 /etc/filebeat/filebeat.yml 
 CMD [ "filebeat", "-e", "-c", "/etc/filebeat/filebeat.yml", "-d", "*" ]
 RUN apt-get install -y wget procps
 RUN apt-get install -y vim
