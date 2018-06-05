@@ -36,7 +36,7 @@ filebeat.modules:
 
     # Set custom paths for the log files. If left empty,
     # Filebeat will choose the paths depending on your OS.
-    var.paths: ["/usr/share/tomcat/logs/localhost_access_log.*.txt"]
+    var.paths: ["/usr/local/tomcat/logs/localhost_access_log.*.txt"]
 
     # Prospector configuration (advanced). Any prospector configuration option
     # can be added under this section.
@@ -48,7 +48,7 @@ filebeat.modules:
 
     # Set custom paths for the log files. If left empty,
     # Filebeat will choose the paths depending on your OS.
-    var.paths: ["/usr/share/tomcat/logs/localhost_access_log.*.txt"]
+    var.paths: ["/usr/local/tomcat/logs/localhost_access_log.*.txt"]
 
     # Prospector configuration (advanced). Any prospector configuration option
     # can be added under this section.
@@ -66,7 +66,7 @@ filebeat.prospectors:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - /usr/share/tomcat/logs/*.*
+    - /usr/local/tomcat/logs/*.*
     #- c:\programdata\elasticsearch\logs\*
 
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
