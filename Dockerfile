@@ -8,9 +8,9 @@ COPY metricbeat.yml /etc/metricbeat/
 COPY filebeat.yml /etc/filebeat/
 RUN chmod 744  /etc/metricbeat/metricbeat.yml
 RUN chmod 744 /etc/filebeat/filebeat.yml 
-CMD [ "filebeat", "-e", "-c", "/etc/filebeat/filebeat.yml", "-d", "*" ]
 RUN apt-get install -y wget procps
 RUN apt-get install -y vim
 COPY tomcat-users.xml /usr/local/tomcat/conf/
 RUN wget -O /usr/local/tomcat/webapps/spring-petclinic.war http://34.196.120.121:8081/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.springframework.samples\&a=spring-petclinic\&v=1.0-SNAPSHOT\&p=war
-CMD ["catalina.sh", "run"]
+ENTRYPOINT [ "filebeat", "-e", "-c", "/etc/filebeat/filebeat.yml", "-d", "*", "&" ]
+ENTRYPOINT ["catalina.sh", "run"]
