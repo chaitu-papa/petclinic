@@ -1,0 +1,121 @@
+
+pipeline {
+    agent {
+		label'Terraform'
+		}
+	options {
+		buildDiscarder(logRotator(numToKeepStr: '3'))
+	}
+	environment {
+        major_version = "1.0"
+    }
+	stages {
+		stage('pull-source') { 
+			steps {	
+			    script {
+    			    currentBuild.displayName = "# ${major_version}.$BUILD_NUMBER"
+    				hygieiaBuildPublishStep buildStatus: 'InProgress'
+    				cleanWs()
+    				checkout([$class: 'GitSCM', branches: [[name: "*/master"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'c7e60db1-4689-46b7-92dc-1cd7ffcc3f16', url: 'git@github.com:chaitu-papa/petclinic.git']]])
+    					}
+			}
+		}
+		stage('compile-unit-test') {
+			steps {
+			  script {
+				  if (isUnix()) {        
+					 sh 'chmod +x gradlew'
+					 sh "./gradlew clean build"
+					 hygieiaBuildPublishStep buildStatus: 'InProgress'
+				  } else {
+					 bat(/"gradlew.bat" clean build/) } }
+			  }
+		}
+	   stage('code-coverage') {
+			steps {
+			   script {
+				  if (isUnix()) {
+					 sh 'chmod +x gradlew'
+					 sh "./gradlew jacocoTestReport"
+					 hygieiaBuildPublishStep buildStatus: 'InProgress'
+				  } else {
+					 bat(/"gradlew.bat" jacocoTestReport/)}}
+			  }
+	   }
+		stage('code-analysis') {
+			steps {
+			   script {
+				  if (isUnix()) {
+					  withCredentials([string(credentialsId: 'sonar-token', variable: 'Sonar_token')]) {
+					  sh "./gradlew sonarqube -Dsonar.host.url=$env.SONAR_URL -Dsonar.login=$Sonar_token -Dsonar.projectVersion=1.0.$BUILD_NUMBER" }
+					  hygieiaBuildPublishStep buildStatus: 'InProgress'
+				   } else { 
+					 bat(/"gradlew.bat" sonarqube/)}}
+			  }
+	   }
+		stage('artifact-publish') {
+			steps {
+			   script {
+				  if (isUnix()) {
+					env.SNAPSHOT="SNAPSHOT"
+					env.BUILD_NUM="$env.BUILD_NUMBER"
+					sh 'chmod +x gradlew'
+					sh "./gradlew upload --info"
+					archive 'build/libs/'		
+					hygieiaArtifactPublishStep artifactDirectory: 'build/libs/', artifactGroup: '$group_id', artifactName: '*.war', artifactVersion: '1.0.$BUILD_NUMBER'
+					hygieiaBuildPublishStep buildStatus: 'SUCCESS'
+					 
+				  } else {
+					 bat(/"gradlew.bat" upload/) }}
+			  }
+	   }
+		stage('container-creation') {		  
+			steps { // Run the gradle upload
+			 script {
+			  if (isUnix()) {
+					sh '''CONTAINER_ID=$(docker ps | grep $organizations/$app_name| awk {\'print $1\'})
+						if [ $CONTAINER_ID != '' ]
+						then				
+							docker stop $CONTAINER_ID
+							docker rm $CONTAINER_ID
+							IMAGE_ID=$(docker images | grep $organizations/$app_name | awk {\'print $3\'})
+							docker rmi $IMAGE_ID
+						fi'''
+					
+					sh "docker build -t $organizations/$app_name:$major_version.$BUILD_NUMBER ."
+					sh "docker run -d --name=$app_name -e db_script=mysql -e jdbc_driverClassName=com.mysql.jdbc.Driver -e jdbc_url=jdbc:mysql://34.196.120.121:3306/petclinic?useUnicode=true -e jdbc_username=root -e jdbc_password=mypassword  -p 49010:8080 $organizations/$app_name:$major_version.$BUILD_NUMBER" 
+					sleep time: 1, unit: 'MINUTES'				
+				  } else {
+					 bat(/"Docker image creation"/) }}
+			  }
+	   }
+	   stage('container-publish') {
+		  steps {// Run the gradle upload
+		   script {
+				  if (isUnix()) {
+					withCredentials([usernamePassword(credentialsId: '30d66ce0-2162-4ba4-b36f-2524ad06a27e', passwordVariable: 'DockerPassword', usernameVariable: 'DockerUser')]) {
+						
+						sh '''RESPONSE=$(curl -s -w "%{http_code}" http://17.0.0.93:49010/spring-petclinic)
+						if [ "$RESPONSE" == "302" ]
+						then
+							echo "Application is working and it returns the value $RESPONSE"				
+							docker login -u $DockerUser -p $DockerPassword  
+							docker push $organizations/$app_name:$major_version.$BUILD_NUMBER				
+							echo "Stopping the container and removing the container and its image"
+							CONTAINER_ID=$(docker ps | grep $organizations/$app_name| awk {\'print $1\'})
+							docker stop $CONTAINER_ID
+							docker rm $CONTAINER_ID
+							IMAGE_ID=$(docker images | grep $organizations/$app_name | grep $major_version.$BUILD_NUMBER | awk {\'print $1\'})
+							docker rmi $IMAGE_ID:$major_version.$BUILD_NUMBER
+						else
+							echo "Failure"
+							exit 1
+						fi'''
+						}	     
+				  } else {
+					 bat(/"Docker image publish"/) }}
+			  }
+		   }
+     }
+}
+
