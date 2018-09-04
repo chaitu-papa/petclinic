@@ -9,7 +9,6 @@ RUN wget -O /tmp/machine-agent.zip http://34.196.120.121:8081/nexus/service/loca
 ENV APP_AGENT_HOME /opt/appdynamics/appserver-agent
 RUN mkdir -p ${APP_AGENT_HOME} && \
     unzip -oq /tmp/AppServerAgent.zip -d ${APP_AGENT_HOME} && \
-   chmod -R 755 ${APP_AGENT_HOME} && \
     rm /tmp/AppServerAgent.zip
 
 ENV CATALINA_OPTS "$CATALINA_OPTS -javaagent:${APP_AGENT_HOME}/javaagent.jar"
@@ -18,6 +17,7 @@ ENV CATALINA_OPTS "$CATALINA_OPTS -javaagent:${APP_AGENT_HOME}/javaagent.jar"
 ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
 RUN mkdir -p ${MACHINE_AGENT_HOME} && \
     unzip -oq /tmp/machine-agent.zip -d ${MACHINE_AGENT_HOME} && \
+   chmod -R 755 ${MACHINE_AGENT_HOME} && \
     rm /tmp/machine-agent.zip
 # Include start script to configure and start MA at runtime
 
