@@ -26,4 +26,5 @@ RUN mkdir -p ${MACHINE_AGENT_HOME} && \
 COPY tomcat-users.xml /usr/local/tomcat/conf/
 COPY start-service.sh /usr/local/tomcat/bin/start-service.sh
 RUN wget -O /usr/local/tomcat/webapps/spring-petclinic.war http://34.196.120.121:8081/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.springframework.samples\&a=spring-petclinic\&v=1.0-SNAPSHOT\&p=war
-CMD "/usr/local/tomcat/bin/start-service.sh"
+WORKDIR /usr/local/tomcat/bin/
+#CMD "start-service.sh"
