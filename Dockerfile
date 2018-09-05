@@ -24,6 +24,6 @@ RUN mkdir -p ${MACHINE_AGENT_HOME} && \
 # Configure and Run AppDynamics Machine Agent
 
 COPY tomcat-users.xml /usr/local/tomcat/conf/
+COPY start-service.sh /usr/local/tomcat/bin/start-service.sh
 RUN wget -O /usr/local/tomcat/webapps/spring-petclinic.war http://34.196.120.121:8081/nexus/service/local/artifact/maven/redirect?r=snapshots\&g=org.springframework.samples\&a=spring-petclinic\&v=1.0-SNAPSHOT\&p=war
-CMD "${MACHINE_AGENT_HOME}/bin/machine-agent"
-CMD ["catalina.sh", "run"]
+CMD "/usr/local/tomcat/bin/start-service.sh"
