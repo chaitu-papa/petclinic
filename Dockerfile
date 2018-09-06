@@ -4,7 +4,7 @@ RUN apt-get update
 RUN apt-get install -y vim
 RUN apt-get install -y wget procps unzip
 RUN wget -O /tmp/AppServerAgent.zip http://34.196.120.121:8081/nexus/service/local/artifact/maven/redirect?r=releases\&g=org.springframework.samples\&a=AppServerAgent\&v=4.5.1.23676\&p=zip
-RUN wget -O /tmp/machine-agent.zip http://34.196.120.121:8081/nexus/service/local/artifact/maven/redirect?r=releases\&g=org.springframework.samples\&a=machineagent\&v=4.5.0.1285\&p=zip
+RUN wget -O /tmp/machine-agent.zip http://34.196.120.121:8081/nexus/service/local/artifact/maven/redirect?r=releases\&g=org.springframework.samples\&a=machineagent\&v=4.5.1.1385\&p=zip
 # Install AppDynamics Machine Agent
 ENV APP_AGENT_HOME /opt/appdynamics/appserver-agent
 RUN mkdir -p ${APP_AGENT_HOME} && \
