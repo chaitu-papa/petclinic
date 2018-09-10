@@ -12,13 +12,6 @@ RUN mkdir -p ${APP_AGENT_HOME} && \
     rm /tmp/AppServerAgent.zip
 
 ENV CATALINA_OPTS "$CATALINA_OPTS -javaagent:${APP_AGENT_HOME}/javaagent.jar"
-ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.controller.hostName=$APPDYNAMICS_CONTROLLER_HOST_NAME"
-ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.controller.port=$APPDYNAMICS_CONTROLLER_PORT"
-ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.applicationName=$APPDYNAMICS_AGENT_APPLICATION_NAME"
-ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.tierName=$APPDYNAMICS_AGENT_TIER_NAME"
-ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.nodeName=$APPDYNAMICS_AGENT_NODE_NAME"
-ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.accountName=$APPDYNAMICS_AGENT_ACCOUNT_NAME"
-ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.accountAccessKey=$APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY"
 
 # Install AppDynamics Machine Agent
 ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
