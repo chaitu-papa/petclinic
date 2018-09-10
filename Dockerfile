@@ -19,7 +19,7 @@ ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.tierName=$APPDYNAMICS_AGEN
 ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.nodeName=$APPDYNAMICS_AGENT_NODE_NAME"
 ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.accountName=$APPDYNAMICS_AGENT_ACCOUNT_NAME"
 ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.accountAccessKey=$APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY"
-ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.appdynamics.agent.uniqueHostId=$APPDYNAMICS_AGENT_UNIQUE_HOST_ID"
+ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.uniqueHostId=$APPDYNAMICS_AGENT_UNIQUE_HOST_ID"
 
 # Install AppDynamics Machine Agent
 ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
