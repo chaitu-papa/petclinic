@@ -12,7 +12,7 @@ RUN mkdir -p ${APP_AGENT_HOME} && \
     unzip -oq /tmp/AppServerAgent.zip -d ${APP_AGENT_HOME} && \
     rm /tmp/AppServerAgent.zip
 
-ENV CATALINA_OPTS "$CATALINA_OPTS -javaagent:${APP_AGENT_HOME}/javaagent.jar"
+#ENV CATALINA_OPTS "$CATALINA_OPTS -javaagent:${APP_AGENT_HOME}/javaagent.jar"
 
 # Install AppDynamics Machine Agent
 ENV MACHINE_AGENT_HOME /opt/appdynamics/machine-agent
