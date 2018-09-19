@@ -30,7 +30,6 @@ ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.tierName=$APPDYNAMICS_AGEN
 ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.nodeName=$APPDYNAMICS_AGENT_NODE_NAME"
 ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.accountName=$APPDYNAMICS_AGENT_ACCOUNT_NAME"
 ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.accountAccessKey=$APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY"
-ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.reuse.nodeName.prefix=test"
 ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.reuse.nodeName=true"
 ENV CATALINA_OPTS "$CATALINA_OPTS -Dappdynamics.agent.uniqueHostId=$(sed -rn '1s#.*/##; 1s/(.{12}).*/\1/p' /proc/self/cgroup)"
 ENV CATALINA_OPTS "$CATALINA_OPTS -javaagent:${APP_AGENT_HOME}/javaagent.jar"
