@@ -1,5 +1,12 @@
 #!/bin/bash
 
+/usr/local/tomcat/bin/catalina.sh stop -force
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to stop Tomcat Serive: $status"
+  exit $status
+fi
+sleep 30
 # Start the first process
 /usr/local/tomcat/bin/catalina.sh start
 status=$?
@@ -7,7 +14,6 @@ if [ $status -ne 0 ]; then
   echo "Failed to start Tomcat Serive: $status"
   exit $status
 fi
-sleep 30
 # Start the second process
 #/opt/appdynamics/machine-agent/bin/machine-agent 
 #status=$?
