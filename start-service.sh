@@ -1,4 +1,10 @@
 #!/bin/bash
+/usr/local/tomcat/bin/shutdown.sh
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to stop Tomcat Serive: $status"
+  exit $status
+fi
 # Start the first process
 /usr/local/tomcat/bin/catalina.sh start
 status=$?
