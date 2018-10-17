@@ -16,10 +16,10 @@ properties([[$class: 'BuildDiscarderProperty',
 	   stage('Environment') {
 		if (isUnix()) {
 			withCredentials([string(credentialsId: 'servicenow', variable: 'servicenow')]) {
-				def serviceid = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/devops_request_details" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"sysId\\": \\"$ServiceNowID\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
+				def serviceid = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/x_cogz_smart_devop/devops_request_details" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"sysId\\": \\"$ServiceNowID\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
 				println "ServiceNow Requested Item: " +serviceid.trim()
 		
-				def ret0 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\"Started Jenkins $app_name application deployment with version $app_version on $env_name environment\\",\\"state\\": \\"AWS Environment Build and Deployment in Progress\\",\\"jenkinsConsoleURL\\":\\"$BUILD_URL/console\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
+				def ret0 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/x_cogz_smart_devop/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\"Started Jenkins $app_name application deployment with version $app_version on $env_name environment\\",\\"state\\": \\"AWS Environment Build and Deployment in Progress\\",\\"jenkinsConsoleURL\\":\\"$BUILD_URL/console\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
 				if ( ret0.trim() == "success" ) {
 					println ret0
 				} else {
@@ -36,7 +36,7 @@ properties([[$class: 'BuildDiscarderProperty',
 						ansiblePlaybook credentialsId: '14bd8691-b88a-427a-8488-cf28846b9820', installation: 'ansible', extras: '--extra-vars="app_version=$app_version" --extra-vars="dns_name=$dns_name" --extra-vars="alias_hosted_zone_id=$alias_hosted_zone_id" --extra-vars="env_name=$env_name" --extra-vars="min_instances=$min_instances" --extra-vars="max_instances=$max_instances" --extra-vars="cf_sg_group=$cf_sg_group" --extra-vars="AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" --extra-vars="AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" --extra-vars="app_name=$app_name" --extra-vars="env_name=$env_name" --extra-vars="cf_subnet=$cf_subnet"  --extra-vars="hosted_zone=$hosted_zone" --extra-vars="InstanceType=$infra_type"', playbook: 'cf-aws.yml', sudoUser: null
 						hygieiaDeployPublishStep applicationName: "$app_name", artifactDirectory: 'build/libs/', artifactGroup: '$group_id', artifactName: '*.war', artifactVersion: '$app_version', buildStatus: 'SUCCESS', environmentName: '$env_name'     
 				}
-				def ret1 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\"Deployment completed successfully on $env_name environment\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
+				def ret1 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/x_cogz_smart_devop/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\"Deployment completed successfully on $env_name environment\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
 					if ( ret1.trim() == "success" ) {
 							println ret1
 					} else {
@@ -54,7 +54,7 @@ properties([[$class: 'BuildDiscarderProperty',
      	if ( "$env_name" == "UAT" ) {
 				
 				withCredentials([string(credentialsId: 'servicenow', variable: 'servicenow')]) {
-					def ret3 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" Performance testing started on $env_name environment for $app_name application with version $app_version \\",\\"state\\": \\"Testing in Progress\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
+					def ret3 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/x_cogz_smart_devop/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" Performance testing started on $env_name environment for $app_name application with version $app_version \\",\\"state\\": \\"Testing in Progress\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
 					if ( ret3.trim() == "success" ) {
 									println ret3
 								} else {
@@ -72,7 +72,7 @@ properties([[$class: 'BuildDiscarderProperty',
 					
 					// hygieiaTestPublishStep buildStatus: 'Success', testApplicationName: 'SpringPetClinic', testEnvironmentName: 'UAT', testFileNamePattern: 'report.jtl', testResultsDirectory: '.', testType: 'Regression'
 		  
-					def ret4 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" Performance test completed successfully on $env_name environment \\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true) 
+					def ret4 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/x_cogz_smart_devop/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" Performance test completed successfully on $env_name environment \\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true) 
 					if ( ret4.trim() == "success" ) {
 									println ret4
 								} else {
@@ -83,7 +83,7 @@ properties([[$class: 'BuildDiscarderProperty',
 				} // Servicenow credentials	
 		} // UAT environment          
 		  	withCredentials([string(credentialsId: 'servicenow', variable: 'servicenow')]) {
-			def ret6 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" AWS Environment Build completed successfully on $env_name environment \\",\\"state\\": \\"Complete\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true) 
+			def ret6 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/x_cogz_smart_devop/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" AWS Environment Build completed successfully on $env_name environment \\",\\"state\\": \\"Complete\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true) 
 					if ( ret6.trim() == "success" ) {
 							println ret6
 					} else {
@@ -101,7 +101,7 @@ catch (exc) {
     echo "Caught: ${exc}"	
 	currentBuild.result = "FAILURE"	
 	withCredentials([string(credentialsId: 'servicenow', variable: 'servicenow')]) {
-		def ret5 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/cogz/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\"ServiceNow Request Failed on $env_name environment\\",\\"state\\": \\"Failed\\"}" --user "202890":"123" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)  
+		def ret5 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/x_cogz_smart_devop/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\"ServiceNow Request Failed on $env_name environment\\",\\"state\\": \\"Failed\\"}" --user "202890":"123" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)  
 		if ( ret5.trim() == "success" ) {
 					println ret5
 			} else {
