@@ -53,33 +53,13 @@ properties([[$class: 'BuildDiscarderProperty',
        if (isUnix()) {
      	if ( "$env_name" == "UAT" ) {
 				
-				withCredentials([string(credentialsId: 'servicenow', variable: 'servicenow')]) {
-					def ret3 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/x_cogz_smart_devop/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" Performance testing started on $env_name environment for $app_name application with version $app_version \\",\\"state\\": \\"Testing in Progress\\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true)
-					if ( ret3.trim() == "success" ) {
-									println ret3
-								} else {
-									println "failed"
-									currentBuild.result = "FAILURE"
-									error "Unable to update ServiceNow Request aborting Request"									 
-								}
-					// build job: 'jmeter-pipeline', parameters: [string(name: 'env_name', value: 'UAT')]
-					
+						
 					
 					checkout([$class: 'GitSCM', branches: [[name: "*/sn-master"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'c7e60db1-4689-46b7-92dc-1cd7ffcc3f16', url: 'git@github.com:chaitu-papa/petclinic.git']]])
 					sh "/home/ec2-user/apache-jmeter-3.3/bin/jmeter.sh -n -t src/test/jmeter/petclinic_test_plan.jmx -l report.jtl -e -o test-out -Jjmeter.save.saveservice.output_format=csv"
 					perfReport modePerformancePerTestCase: true, modeThroughput: true, sourceDataFiles: 'report.jtl'
+			
 					
-					
-					// hygieiaTestPublishStep buildStatus: 'Success', testApplicationName: 'SpringPetClinic', testEnvironmentName: 'UAT', testFileNamePattern: 'report.jtl', testResultsDirectory: '.', testType: 'Regression'
-		  
-					def ret4 = sh(script: 'curl "https://cognizantcatalyst.service-now.com/api/x_cogz_smart_devop/pipeline_deployment_metric" --request POST --header "Accept:application/json" --header "Content-Type:application/json" --data "{\\"id\\": \\"$ServiceNowID\\", \\"comments\\": \\" Performance test completed successfully on $env_name environment \\"}" --user "202890":"$servicenow" 2>/dev/null|cut -d":" -f3|cut -d"\\"" -f2', returnStdout: true) 
-					if ( ret4.trim() == "success" ) {
-									println ret4
-								} else {
-									println "failed"
-									currentBuild.result = "FAILURE"
-									error "Unable to update ServiceNow Request aborting Request"									 
-								}
 				} // Servicenow credentials	
 		} // UAT environment          
 		  	withCredentials([string(credentialsId: 'servicenow', variable: 'servicenow')]) {
