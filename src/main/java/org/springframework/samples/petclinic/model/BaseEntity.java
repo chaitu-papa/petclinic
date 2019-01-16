@@ -32,7 +32,7 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-   // public Integer getId() {
+   public Integer getId() {
         return id;
     }
 
