@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  labels:
+    app: spring-petclinic
+  name: my-spring-petclinic
+spec:
+  replicas: '${ #toInt( parameters.replicas ) }'
+  selector:
+    matchLabels:
+      app: spring-petclinic
+  template:
+    metadata:
+      labels:
+        app: spring-petclinic
+    spec:
+      containers:
+        - env:
+            - name: db_script
+              value: mysql
+            - name: jdbc_driverClassName
+              value: com.mysql.jdbc.Driver
+            - name: jdbc_url
+              value: 'jdbc:mysql://34.196.120.121:3306/petclinic?useUnicode=true'
+            - name: jdbc_username
+              value: root
+            - name: jdbc_password
+              value: mypassword
+          image: '${ARTIFACT}'
+          name: my-petclinic
+          ports:
+            - containerPort: 8080
+      dnsPolicy: ClusterFirst
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-petclinic-service
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: spring-petclinic
+  type: LoadBalancer
