@@ -31,6 +31,6 @@ docker run -d -p 49009:8080 --name tomcat tomcat:cutomerApp
 
 Step 7:Sample change
 
-Adding change for PET-10
+Adding change for PET-10 test2
 Adding change for PET-18
 Adding change for PET-18 test
