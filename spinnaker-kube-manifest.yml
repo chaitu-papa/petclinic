@@ -27,7 +27,7 @@ spec:
             - name: jdbc_driverClassName
               value: com.mysql.jdbc.Driver
             - name: jdbc_url
-              value: 'jdbc:mysql://34.196.120.121:3306/petclinic?useUnicode=true'
+              value: 'jdbc:mysql://a956f7928021511eaae010ac87effead-830583172.us-east-1.elb.amazonaws.com:3306/petclinic?useUnicode=true'
             - name: jdbc_username
               value: root
             - name: jdbc_password
