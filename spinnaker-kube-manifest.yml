@@ -10,15 +10,11 @@ spec:
   replicas: '${ #toInt( parameters.replicas ) }'
   selector:
     matchLabels:
-      app.kubernetes.io/managed-by: spinnaker
-      app.kubernetes.io/name: spring-petclinic
       app: spring-petclinic
   template:
     metadata:
       labels:
           app: spring-petclinic
-          app.kubernetes.io/managed-by: spinnaker
-          app.kubernetes.io/name: spring-petclinic
     spec:
       containers:
         - env:
@@ -37,21 +33,3 @@ spec:
           ports:
             - containerPort: 8080
       dnsPolicy: ClusterFirst
----
-apiVersion: v1
-kind: Service
-metadata:
-  app.kubernetes.io/managed-by: spinnaker
-  app.kubernetes.io/name: spring-petclinic
-  name: spring-petclinic-service
-  namespace: dev-1
-spec:
-  ports:
-    - port: 80
-      protocol: TCP
-      targetPort: 8080
-  selector:
-    app: spring-petclinic
-    app.kubernetes.io/managed-by: spinnaker
-    app.kubernetes.io/name: spring-petclinic
-  type: LoadBalancer
