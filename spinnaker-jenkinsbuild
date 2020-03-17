@@ -1,0 +1,51 @@
+node('master') {
+    stage('pull-source') { 
+
+	    cleanWs()
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'git-credentials', url: 'https://github.com/chaitu-papa/petclinic.git']]])
+   }
+   stage('compile-unit-test') {
+      // Run the gradle build
+      if (isUnix()) {        
+         sh 'chmod +x gradlew'
+         sh "./gradlew clean build"
+		 
+      } else {
+         bat(/"gradlew.bat" clean build/)
+      }
+   }
+   stage('code-coverage') {
+      // Run the gradle build
+      if (isUnix()) {
+         sh 'chmod +x gradlew'
+         sh "./gradlew jacocoTestReport"
+
+      } else {
+         bat(/"gradlew.bat" jacocoTestReport/)
+      }
+   }
+    stage('code-analysis') {
+    
+      if (isUnix()) {
+          withCredentials([string(credentialsId: 'sonar-token', variable: 'Sonar_token')]) {
+          sh "./gradlew sonarqube -Dsonar.host.url=$env.SONAR_URL -Dsonar.login=$Sonar_token -Dsonar.projectVersion=1.0.$BUILD_NUMBER" }
+		
+       } else { 
+         bat(/"gradlew.bat" clean build jacocoTestReport/)
+      }
+   }
+    stage('artifact-publish') {
+      // Run the gradle upload
+      if (isUnix()) {
+        env.SNAPSHOT="SNAPSHOT"
+        env.BUILD_NUM="$env.BUILD_NUMBER"
+        sh 'chmod +x gradlew'
+        sh "./gradlew upload --info"
+		archiveArtifacts 'build/libs/'		
+	     
+      } else {
+         bat(/"gradlew.bat" upload/)
+      }
+   }
+    
+   }
