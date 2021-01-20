@@ -93,5 +93,5 @@ exclude(module: 'commons-logging')
     providedCompile group: 'org.apache.tomcat', name: 'tomcat-servlet-api', version:'7.0.59'
     providedCompile group: 'javax.servlet.jsp', name: 'javax.servlet.jsp-api', version:'2.3.2-b02'
     providedCompile group: 'org.apache.tomcat', name: 'tomcat-jasper-el', version:'7.0.59'
-    runtime group: 'mysql', name: 'mysql-connector-java', version:'5.1.36'
+    runtime group: 'mysql', name: 'mysql-connector-java', version:'8.0.20'
 }
